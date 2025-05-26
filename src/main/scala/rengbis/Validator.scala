@@ -1,7 +1,7 @@
-package relax_schema
+package rengbis
 
 import zio.Chunk
-import relax_schema.Schema.*
+import rengbis.Schema.*
 import scala.util.{Try, Success, Failure}
 
 object Validator:

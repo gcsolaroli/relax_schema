@@ -1,4 +1,4 @@
-package relax_schema
+package rengbis
 
 import zio.test.{ TestConsole, ZIOSpecDefault, assertTrue }
 import zio.test.TestResult.{ allSuccesses }

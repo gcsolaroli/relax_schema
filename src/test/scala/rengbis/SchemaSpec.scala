@@ -1,9 +1,9 @@
-package relax_schema
+package rengbis
 
 import zio.test.{ TestConsole, ZIOSpecDefault, assertTrue }
 import zio.test.TestResult.{ allSuccesses }
 import zio.Chunk
-import relax_schema.Schema.*
+import rengbis.Schema.*
 
 object SchemaSpec extends ZIOSpecDefault:
     def parseTest(text: String, expectedValue: Schema) =  test(text) { assertTrue(parse(text) == Right(expectedValue)) }

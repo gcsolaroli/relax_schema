@@ -1,4 +1,4 @@
-package relax_schema
+package rengbis
 
 import zio.Chunk
 import zio.parser.{ Syntax, SyntaxOps, StringParserError, StringErrSyntaxOps, AnySyntaxOps, ParserOps, Parser, Printer }
