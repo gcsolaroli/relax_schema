@@ -18,8 +18,8 @@ This project is an experiment to try to replicate the convenience and affordance
 ## How does it compare to alternative options
 The closest alternative I have spotted is [CUE](https://cuelang.org/), even though I discoverd it only after having already worked on this project. I will have to investigate the CUE project further to understand if this is just an half baked duplicated effort, or there are some differences that may justify the effort to push this project forward.
 
-# Example
-Here is a simple example of a `rengbis` structure (taken from the tests).
+# Examples
+Here are some examples of a `rengbis` definitions taken from the [tests](./src/test/scala/rengbis/ValidatorSpec.scala).
 
 ## Simple structure
 #### Rengbis schema
@@ -61,7 +61,6 @@ hobbies:
 </root>
 ```
 
-
 # Implementation
 The current implementation is written in `scala 3`, using [`ZIO`](https://zio.dev) and its [`parser` library](https://zio.dev/zio-parser/)
 
@@ -70,18 +69,89 @@ The current implementation provides helpers to validate `xml`, `json`, and `yaml
 
 The current implementation encodes all the values using the `rengbis.Value` class before validating their content.
 
+# Features
+Here is a brief run down of the currently supported features
+
+## Basic value types and Alternative options
+```rengbis
+= text | number | boolean
+```
+This schema defines a value that may be a `text`, a `number`, or a `boolean` value.
+Besides the basic value types, it also shows the way to define alternative options (`|`) for a given value.
+
+## Basic structure (aka "dictionary")
+```rengbis
+= {
+	name: text
+	age?: number
+	hobbies: text*
+}
+```
+This schema defines a dictionaly value that **should** contain a `name` (of type `text`), **may** (`?`) contain an `age` (of type `number`), and **should** contain some `hobbies` (list, possibly empty – `*`, of `text`).
+The comma to separate the different keys is required only when listing multiple values on the same line; when separating values in new lines, separatinig commas are optional.
+
+## Named structures
+```rengbis
+foo = {
+    foo_1: number,
+    foo_2: text
+}
+
+bar = {
+    bar_A: text*,
+    bar_b: number*
+}
+
+= {
+    key_1: foo,
+    key_2: bar
+}
+```
+This schema defines two **named structures** (`foo` and `bar`) that are used to define other structures.
+
+## Constant values
+```rengbis
+= "yes" | "no"
+```
+This schema defines a value that could only have either the text `yes` or the text `no` as values.
+
+## Tuple values
+```rengbis
+= (text, text, number)
+```
+This schema defines a value that should contain three values, the first two of type `text`, and the last of type `number`.
+Tuple values are not useful for *regular* documents (`yaml`, `json`, `xml`, …), but may be quite handy in describing tabular data (eg `csv` files) when columns do not have an explicit name.
+
+
+## Text constraints
+```rengbis
+= text { pattern = "([0-9]{4}-[0-9]{2}-[0-9]{2})", length == 10 }
+```
+Text values may be constraint with either a `pattern` (defined as a `regex`) or a `length`.
+
+## List constraints
+```rengbis
+= {
+  possibly_empty_list_of_text: text*
+  list_with_at_least_one_element: text+
+  list_with_exactly_three_element: text{3}
+  list_with_a_number_of_elements_between_two_and_ten: text{2,10}
+}
+```
+List values may be constrainted in the number of items they contain.
+
+## Number costraints - MISSING
+The options for numeric constraints are way more articulated than what has already been implemented for text and list values, and they will require some more thoughts on how to define them.
+Nothing is conceptually difficult, but will probably require a lot of tries before finding a satisfying arrangement.
+Values would have to be constraint at least on **range of values**, number of decimal digits, precision, scale; more option may emerge while working on the definition.
+
+## Comments - MISSING
+Comments are currently not supported; I briefely tried to add their definition to the syntax, but failed miserably, so I have postpone the effort.
+
 
 # Status of the project
 This is a very early prototype, shared only to get some feedback; besides the few test included in the code base, it has not be used anywhere else.
 
-## Missing pieces
-There are some notable features missing from the current implementation. The most notable are:
-- missing support for comments in the schema definition syntax; I briefely tried to add it, but failed miserably, so I have postpone the effort
-- numeric values constraints: the options for numeric constraints are way more articulated than what has already been implemented for strings and lists, and they will require some thoughts on how to define them. Nothing conceptually difficult, but will probably require a lot of tries before finding a satisfying arrangement.
-
 ## Future enhancements
 Before venturing in this experiment, I did many tries with [`zio-schema`](https://github.com/zio/zio-schema); unfortunately I was not able to find a way to use that library to achieve my goals.
 [Lately](https://x.com/jdegoes/status/1919380595597090856) a [new version](https://github.com/zio/zio-blocks) of `zio-schema` has been announced; I haven't had the time to play with it yet, but the idea of using `rengbis` as a language to define `zio-schema` values that could be later leveraged to validate/parse actual payloads, getting rid of the custom  machinary I had to build myself seems an interesting option to validate.
-
-
-
