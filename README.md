@@ -1,4 +1,4 @@
-# Rengbis
+# ReNGBis
 
 this is a "technology preview" (meaning that it is still just a rough experiment) of a possible schema language for validating payloads; also the name is just a temporary placeholder.
 
