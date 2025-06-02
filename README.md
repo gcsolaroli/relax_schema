@@ -1,6 +1,6 @@
 # ReNGBis
 
-this is a "technology preview" (meaning that it is still just a rough experiment) of a possible schema language for validating payloads; also the name is just a temporary placeholder.
+this is a "technology preview" (meaning that it is still just a rough experiment) of a possible schema language for validating payloads.
 
 It is a **content** schema definition, that allows to specify the expected content of a payload.
 It's not focused on specific formats, and thus it is not able to validate the use of any specific serialization option (eg. using attributes instead of elements in an `xml` document).
@@ -13,10 +13,12 @@ Thanks to [Tim Bray](https://www.tbray.org/ongoing/misc/Tim) for [suggesting](ht
 Most schema definition languages are pretty tedious to use; the only "enjoyable" schema language I have met is the compact syntax of [RELAX NG](https://en.wikipedia.org/wiki/RELAX_NG); its project and tools are pretty stale (they were last updated in the early 2000), but they still work wonders for processing XML files.
 RELAX NG affordance in defining a schema beates XSD hands down.
 
-This project is an experiment to try to replicate the convenience and affordance of RELAX NG schema definition (some hints to this also in the temporary name of this project) getting rid of the tight binding with XML, making it suitable to validate payloads of multiple serialization protocols.
+This project is an experiment to try to replicate the convenience and affordance of RELAX NG schema definition getting rid of the tight binding with XML, making it suitable to validate payloads of multiple serialization protocols.
 
 ## How does it compare to alternative options
 The closest alternative I have spotted is [CUE](https://cuelang.org/), even though I discoverd it only after having already worked on this project. I will have to investigate the CUE project further to understand if this is just an half baked duplicated effort, or there are some differences that may justify the effort to push this project forward.
+
+I personally don't like working neither with XSD nor JSON-Schema; their choice of defining a schema using the same structure and syntax used for serializing the same data that needs to be specified does not seem like an effective option to me as you end up being constrained by choices suitable for a problem (effectively marshalling values) while solving a completely different problem (define valid values).
 
 # Examples
 Here are some examples of a `rengbis` definitions taken from the [tests](./src/test/scala/rengbis/ValidatorSpec.scala).
@@ -25,9 +27,9 @@ Here are some examples of a `rengbis` definitions taken from the [tests](./src/t
 #### Rengbis schema
 ```rengbis
 = {
-	name: text
-	age: number
-	hobbies: text*
+    name: text
+    age: number
+    hobbies: text*
 }
 ```
 
@@ -82,9 +84,9 @@ Besides the basic value types, it also shows the way to define alternative optio
 ## Basic structure (aka "dictionary")
 ```rengbis
 = {
-	name: text
-	age?: number
-	hobbies: text*
+    name: text
+    age?: number
+    hobbies: text*
 }
 ```
 This schema defines a dictionaly value that **should** contain a `name` (of type `text`), **may** (`?`) contain an `age` (of type `number`), and **should** contain some `hobbies` (list, possibly empty – `*`, of `text`).
