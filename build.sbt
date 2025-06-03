@@ -20,7 +20,7 @@ ThisBuild / scalacOptions ++= Seq(
 lazy val root =
   project
     .in(file("."))
-    .settings(name := "relax-schema")
+    .settings(name := "rengbis")
     .settings(version := "0.0.1-SNAPSHOT")
     .settings(dependencies)
     .settings(testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework"))
